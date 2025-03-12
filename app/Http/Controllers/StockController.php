@@ -28,25 +28,34 @@ class StockController extends Controller
     }
 
     // Display the specified stock
-    public function show(Stock $stock)
+    public function show(Request $request,Stock $stock)
     {
-        return $stock;
+        
     }
 
     public function update(Request $request, Stock $stock)
 {
-    $validatedData = $request->validate([
-        'quantity' => 'required|integer',
-        'operation' => 'required|string|in:add,subtract',
-    ]);
+    $operation = $request->query('operation');
 
-    if ($validatedData['operation'] == 'add') {
+    if($operation!='empty'){
+        $validatedData = $request->validate([
+            'quantity' => 'required',
+        ]);
+        if ($operation == 'add') {
         $newQuantity = $stock->quantity + $validatedData['quantity'];
     } else { 
         $newQuantity = $stock->quantity - $validatedData['quantity'];
     }
-
     $stock->update(['quantity' => $newQuantity]);
+}else{
+    $validatedData = $request->validate([
+        'name' => 'required',
+        'price' => 'required',
+    ]);
+    $stock->update($validatedData);
+
+}
+
 
     return response()->json($stock);
 }
