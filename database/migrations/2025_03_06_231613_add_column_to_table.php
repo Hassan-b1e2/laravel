@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->boolean('seen');
-
+        Schema::table('clients', function (Blueprint $table) {
+            $table->string('status');
+            $table->string('whatsapp');
         });
     }
 
@@ -26,8 +26,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            //
+        Schema::table('clients', function (Blueprint $table) {
+            $table->dropColumn('status');
+            $table->dropColumn('whatsapp');
         });
     }
 };

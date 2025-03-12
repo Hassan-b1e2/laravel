@@ -19,6 +19,17 @@ class ClientController extends Controller
         $clientId = $request->query('clientId');
         $start_date = $request->query('start_date');
         $end_date = $request->query('end_date');
+        $status = $request->query('status');
+
+        if ($status) {
+            if($status=='local'){
+            $clients = Client::where('status', $status)->get();
+            return response()->json($clients);
+        }else{
+            $clients = Client::whereNot('status', 'local')->get();
+            return response()->json($clients);
+        }
+        }
     
         if ($clientId) {
             $client = Client::where('id', $clientId)->get();
@@ -53,7 +64,10 @@ class ClientController extends Controller
             'ice' => 'required|max:5000',
             'address' => 'required',
             'payment' => 'required',
-            'city' => 'required'
+            'city' => 'required',
+            'whatsapp' => 'required',
+            'status' => 'required'
+
         ]);
     
         Client::create($validatedData);
@@ -69,7 +83,9 @@ class ClientController extends Controller
             'ice' => 'required|max:5000',
             'address' => 'required',
             'payment' => 'required',
-            'city' => 'required'
+            'city' => 'required',
+            'whatsapp' => 'required',
+            'status' => 'required'
         ]);
     
         $client->update($validatedData);
